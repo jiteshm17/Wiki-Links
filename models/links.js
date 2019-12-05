@@ -10,4 +10,4 @@ var LinksSchema = new Schema(
     }
 );
 
-module.exports = mongoose.model('Links', LinksSchema);
+module.exports = mongoose.model('Link', LinksSchema);
