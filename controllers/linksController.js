@@ -1,6 +1,9 @@
 const Link = require('../models/links');
 
+const LocalStorage = require('localStorage');
+
 const Queue = require('../Queue');
+
 
 exports.searchWord = function (req, res) {
     res.render('links/search');
@@ -8,18 +11,72 @@ exports.searchWord = function (req, res) {
 
 exports.results = async function (req, res) {
 
-    var level = req.body.search_level;
     const word = req.body.word;
-    // console.log(documents);
 
-    if (parseInt(level) === 1) {
-        const documents = await Link.find({'document': word});
+    if (typeof req.body.search_level !== "undefined") {
+        if (LocalStorage.getItem('search_level') !== undefined) {
+
+            console.log('Local storage is', LocalStorage.getItem('search_level'));
+            console.log('Value is set');
+            LocalStorage.setItem('search_level', req.body.search_level);
+            console.log('The page number is', req.params.page);
+            const items_per_page = 50;
+            LocalStorage.setItem('items_per_page', items_per_page.toString());
+            var documents = await Link.find({'document': word});
+            LocalStorage.setItem('LevelOne', JSON.stringify(documents[0].links));
+
+            const num_links = documents[0].links.length;
+            var num_pages = num_links % items_per_page;
+            if (num_links % items_per_page > 0) {
+                num_pages += 1;
+            }
+            LocalStorage.setItem('num_links', num_links.toString());
+            LocalStorage.setItem('num_pages', num_pages.toString());
+        }
+    }
+
+    console.log('Current page is', req.params.page);
+
+    const current_level = LocalStorage.getItem('search_level');
+
+    console.log('Current level is', current_level);
+
+    if (parseInt(current_level) === 1) {
+        console.log('The code is in the level');
+
+        var start_index = (parseInt(req.params.page) - 1) * parseInt(LocalStorage.getItem('items_per_page'));
+        var end_index = start_index + parseInt(LocalStorage.getItem('items_per_page'));
+
+        if (end_index >= parseInt(LocalStorage.getItem('num_links'))) {
+            end_index = parseInt(LocalStorage.getItem('num_links')) - 1;
+        }
+
+        var docs = JSON.parse(LocalStorage.getItem('LevelOne')).slice(start_index, end_index + 1);
+        var hasPrev = true;
+        var hasNext = true;
+
+        if (parseInt(req.params.page) === 1) {
+            hasPrev = false;
+        } else if (parseInt(req.params.page) === parseInt(LocalStorage.getItem('num_pages'))) {
+            hasNext = false;
+        }
+
+        // res.send('Hello ');
+
+        console.log('THe code reaches the template');
+        console.log('The current page is', parseInt(req.params.page));
+
         res.render('links/show_words', {
-            documents: documents
+            docs: docs,
+            num_pages: LocalStorage.getItem('num_pages'),
+            items_per_page: LocalStorage.getItem('items_per_page'),
+            hasPrev: hasPrev,
+            hasNext: hasNext,
+            current_page: parseInt(req.params.page)
         });
 
 
-    } else if (parseInt(level) === 2) {
+    } else if (parseInt(current_level) === 2) {
         const documents = await Link.find({'document': word});
 
         let queue = new Queue();
@@ -39,9 +96,6 @@ exports.results = async function (req, res) {
                     level_two_words.push(val);
                 }
             }
-            // else {
-            //     console.log(queue.peek());
-            // }
 
             queue.dequeue()
         }
@@ -52,7 +106,7 @@ exports.results = async function (req, res) {
             documents: level_two_words
         })
 
-    } else if (parseInt(level) === 3) {
+    } else if (parseInt(current_level) === 3) {
         const documents = await Link.find({'document': word});
 
         let queue_LevelOne = new Queue();
