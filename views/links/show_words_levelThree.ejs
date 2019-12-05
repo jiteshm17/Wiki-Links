@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Documents</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+</head>
+<body>
+<h2>List of all the documents at Level Three</h2>
+<% for(var i = 0; i < documents.length; i++) { %>
+    <!--    <li onmouseenter="hover(this, '<%= documents[i] + ',' + ' ' + root + ' -> ' + word_map_levelOne[word_map_levelTwo[documents[i]]] + ' -> ' + word_map_levelTwo[documents[i]] + ' -> ' + documents[i] %>')"-->
+    <!--        onmouseleave="hover(this, '<%= documents[i] %>')"><%= documents[i] %></li>-->
+
+    <li>Hello</li>
+
+<% } %>
+
+<script>
+    function hover(el, str) {
+        el.innerHTML = str;
+    }
+</script>
+
+</body>
+</html>

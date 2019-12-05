@@ -8,14 +8,13 @@
     <title>Documents</title>
 </head>
 <body>
-<h2>List of all the documents</h2>
+<h2>List of all the documents at Level 1</h2>
 <% for(var i = 0; i < documents.length; i++) { %>
     <li><%= documents[i].document %></li>
     <% for(var j = 0; j < documents[i].links.length; j++) { %>
         <ul><%= documents[i].links[j] %></ul>
 
     <% } %>
-
 <% } %>
 </body>
 </html>
