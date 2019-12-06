@@ -2,8 +2,7 @@ const Link = require('../models/links');
 
 const LocalStorage = require('localStorage');
 
-const Queue = require('../Queue');
-
+const getLevels = require('../utils/getLevelTwo');
 
 exports.searchWord = function (req, res) {
     res.render('links/search');
@@ -14,35 +13,33 @@ exports.results = async function (req, res) {
     const word = req.body.word;
 
     if (typeof req.body.search_level !== "undefined") {
-        if (LocalStorage.getItem('search_level') !== undefined) {
 
-            console.log('Local storage is', LocalStorage.getItem('search_level'));
-            console.log('Value is set');
+        if (LocalStorage.getItem('search_level') !== undefined) {
             LocalStorage.setItem('search_level', req.body.search_level);
-            console.log('The page number is', req.params.page);
             const items_per_page = 50;
             LocalStorage.setItem('items_per_page', items_per_page.toString());
+
             var documents = await Link.find({'document': word});
+
             LocalStorage.setItem('LevelOne', JSON.stringify(documents[0].links));
 
             const num_links = documents[0].links.length;
-            var num_pages = num_links % items_per_page;
+
+            var num_pages = parseInt(num_links / items_per_page);
             if (num_links % items_per_page > 0) {
                 num_pages += 1;
             }
+
             LocalStorage.setItem('num_links', num_links.toString());
             LocalStorage.setItem('num_pages', num_pages.toString());
         }
     }
 
-    console.log('Current page is', req.params.page);
 
     const current_level = LocalStorage.getItem('search_level');
 
-    console.log('Current level is', current_level);
 
     if (parseInt(current_level) === 1) {
-        console.log('The code is in the level');
 
         var start_index = (parseInt(req.params.page) - 1) * parseInt(LocalStorage.getItem('items_per_page'));
         var end_index = start_index + parseInt(LocalStorage.getItem('items_per_page'));
@@ -61,11 +58,6 @@ exports.results = async function (req, res) {
             hasNext = false;
         }
 
-        // res.send('Hello ');
-
-        console.log('THe code reaches the template');
-        console.log('The current page is', parseInt(req.params.page));
-
         res.render('links/show_words', {
             docs: docs,
             num_pages: LocalStorage.getItem('num_pages'),
@@ -77,28 +69,12 @@ exports.results = async function (req, res) {
 
 
     } else if (parseInt(current_level) === 2) {
-        const documents = await Link.find({'document': word});
+        const values = await getLevels.getLevelTwoWords(word);
 
-        let queue = new Queue();
-        let word_map = {};
-        let level_two_words = [];
-        for (let link of documents[0].links) {
-            queue.enqueue(link);
-        }
+        const level_two_words = values[0];
 
-        console.log('Size of Queue is ', queue.getLength());
-
-        while (!queue.isEmpty()) {
-            const items = await Link.find({'document': queue.peek()});
-            if (typeof items[0] !== "undefined") {
-                for (let val of items[0].links) {
-                    word_map[val] = queue.peek();
-                    level_two_words.push(val);
-                }
-            }
-
-            queue.dequeue()
-        }
+        const word_map = values[1];
+        console.log(level_two_words.length);
 
         res.render('links/show_words_levelTwo', {
             root: word,
@@ -107,48 +83,10 @@ exports.results = async function (req, res) {
         })
 
     } else if (parseInt(current_level) === 3) {
-        const documents = await Link.find({'document': word});
-
-        let queue_LevelOne = new Queue();
-        let word_map_levelOne = {};
-        let word_map_levelTwo = {};
-        let level_three_words = [];
-        for (let link of documents[0].links) {
-            queue_LevelOne.enqueue(link);
-        }
-
-        console.log('Size of Queue 1 is ', queue_LevelOne.getLength());
-
-        let queue_LevelTwo = new Queue();
-
-        while (!queue_LevelOne.isEmpty()) {
-            const items = await Link.find({'document': queue_LevelOne.peek()});
-            if (typeof items[0] !== "undefined") {
-                for (let val of items[0].links) {
-                    word_map_levelOne[val] = queue_LevelOne.peek();
-                    queue_LevelTwo.enqueue(val);
-                }
-            }
-            queue_LevelOne.dequeue()
-        }
-
-        console.log('Size of Queue 2 is ', queue_LevelTwo.getLength());
-
-        while (!queue_LevelTwo.isEmpty()) {
-
-            const items_LevelTwo = await Link.find({'document': queue_LevelTwo.peek()});
-            if (typeof items_LevelTwo[0] !== 'undefined') {
-                for (let val of items_LevelTwo[0].links) {
-                    word_map_levelTwo[val] = queue_LevelTwo.peek();
-                    level_three_words.push(val);
-
-                }
-            }
-            queue_LevelTwo.dequeue();
-        }
-
-        console.log('Queue 2 is empty');
-
+        const values = await getLevels.getLevelThreeWords(word);
+        const word_map_levelOne = values[0];
+        const word_map_levelTwo = values[1];
+        const level_three_words = values[2];
         res.render('links/show_words_levelThree', {
             root: word,
             word_map_levelOne: word_map_levelOne,
