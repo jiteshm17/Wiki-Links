@@ -61,7 +61,6 @@ exports.getLevelThreeWords = async function (word) {
 
     }
 
-
     let queue_LevelTwo = new Queue();
 
     while (!queue_LevelOne.isEmpty()) {
@@ -81,7 +80,6 @@ exports.getLevelThreeWords = async function (word) {
     }
 
     while (!queue_LevelTwo.isEmpty()) {
-
         const items_LevelTwo = await Link.find({'document': queue_LevelTwo.peek()});
         if (typeof items_LevelTwo[0] !== 'undefined') {
             for (let val of items_LevelTwo[0].links) {

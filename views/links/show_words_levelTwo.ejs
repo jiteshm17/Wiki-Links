@@ -12,6 +12,7 @@
 <body>
 <h2>List of all the documents at Level Two</h2>
 <% for(var i = 0; i < documents.length; i++) { %>
+
     <li onmouseenter="hover(this, '<%= documents[i] + ',' + ' ' + root + ' -> ' + word_map[documents[i]] + ' -> ' + documents[i] %>')"
         onmouseleave="hover(this, '<%= documents[i] %>')"><%= documents[i] %></li>
 
@@ -22,6 +23,35 @@
         el.innerHTML = str;
     }
 </script>
+
+<% if (hasPrev) { %>
+    <a id="PrevLink">
+        <button name="prev">Previous</button>
+    </a>
+    <script>
+        var PreviousPage = <%= current_page %> -1;
+        PreviousPage.toString();
+        console.log('The previous page number is', PreviousPage);
+        var href_path = '/results/' + PreviousPage;
+        document.getElementById('PrevLink').setAttribute("href", href_path);
+    </script>
+<% } %>
+
+<% if(hasNext) { %>
+    <a id="NextLink">
+        <button name="next">Next</button>
+    </a>
+    <script>
+        console.log('The current page number is', '<%= current_page %>');
+        var nextPage = <%= current_page %> +1;
+        nextPage.toString();
+        console.log('The next page number is', nextPage);
+        var href_path = '/results/' + nextPage;
+        console.log('The href path is', href_path);
+        document.getElementById('NextLink').setAttribute("href", href_path);
+    </script>
+
+<% } %>
 
 </body>
 </html>
