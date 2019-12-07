@@ -1,17 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
-    <link type="text/css" rel="stylesheet" href="/stylesheets/style.css">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="author" content="colorlib.com">
+
+    <title>Wiki-Links</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
+    <link href="/stylesheets/style.css" rel="stylesheet" />
 
 </head>
-<body>
-<form method="post" action="/results/1">
-    <input type="text" name="word" placeholder="Search.."><br>
 
-    <input type="radio" name="search_level" value="1" required checked> Level 1<br>
-    <input type="radio" name="search_level" value="2"> Level 2<br>
-    <input type="radio" name="search_level" value="3"> Level 3 <br>
-    <button type="submit">Submit</button>
-</form>
+<body>
+<div class="s130">
+    <form method="post" action="/results/1">
+        <p style="font-size:35px;text-align: center;">Wiki-Links</p>
+        <div class="inner-form" style="background-color: white;">
+            <div class="input-field first-wrap">
+                <div class="svg-wrapper">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+                    </svg>
+                </div>
+                <input id="search" type="text" name="word" placeholder="Enter an interesting word..."  value=""/>
+            </div>
+            <div style="padding:20px;border-left: 1px solid #e6e6e6">
+
+                <div class="container">
+                    <div id="radios">
+                        <label for="Level 1" class="material-icons">
+                            <input type="radio" name="search_level" id="Level 1" value="1" checked/>
+                            <span>1</span>
+                        </label>
+                        <label for="Level 2" class="material-icons">
+                            <input type="radio" name="search_level" id="Level 2" value="2" />
+                            <span>2</span>
+                        </label>
+                        <label for="Level 3" class="material-icons">
+                            <input type="radio" name="search_level" id="Level 3" value="3" />
+                            <span>3</span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="input-field second-wrap">
+                <input class="btn-search" type="submit">
+            </div>
+        </div>
+        <div style="text-align: center"><span class="info"> Enter a Query word and select a level to view all reachable wikipedia documents from your query.</span></div>
+    </form>
+</div>
+<script src="/javascripts/dropdown.js"></script>
 </body>
 </html>
