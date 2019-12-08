@@ -1,22 +1,22 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:http="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="author" content="colorlib.com">
 
-    <title>Search Results</title>
+    <title>Search Results - Level 1</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet" />
-    <link href="/stylesheets/style.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Poppins" rel="stylesheet"/>
+    <link href="/stylesheets/style.css" rel="stylesheet"/>
 
 </head>
 <body>
 
 <div class="s130">
     <form method="post" action="/results/1">
-        <p style="font-size:35px;text-align: center;">Wiki-Links</p>
+        <p style="font-size:35px;text-align: center;">Wiki Links</p>
         <div class="inner-form" style="background-color: white;">
             <div class="input-field first-wrap">
                 <div class="svg-wrapper">
@@ -24,7 +24,8 @@
                         <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
                     </svg>
                 </div>
-                <input id="search" type="text" name="word" placeholder="Enter an interesting word..." value="" required/>
+                <input id="search" type="text" name="word" placeholder="Enter an interesting word..."
+                       value="<%= root %>" required/>
             </div>
             <div style="padding:20px;border-left: 1px solid #e6e6e6">
 
@@ -35,11 +36,11 @@
                             <span>1</span>
                         </label>
                         <label for="Level 2" class="material-icons">
-                            <input type="radio" name="search_level" id="Level 2" value="2" />
+                            <input type="radio" name="search_level" id="Level 2" value="2"/>
                             <span>2</span>
                         </label>
                         <label for="Level 3" class="material-icons">
-                            <input type="radio" name="search_level" id="Level 3" value="3" />
+                            <input type="radio" name="search_level" id="Level 3" value="3"/>
                             <span>3</span>
                         </label>
                     </div>
@@ -50,47 +51,88 @@
                 <input class="btn-search" type="submit">
             </div>
         </div>
-        <div style="text-align: center"><span class="info"> Enter a Query word and select a level to view all reachable wikipedia documents from your query.</span></div>
+        <div style="text-align: center"><span class="info"> Enter a Query word and select a level to view all reachable wikipedia documents from your query.</span>
+        </div>
     </form>
 </div>
 <script src="/javascripts/dropdown.js"></script>
 
 <div class="results">
-<p style="font-size: 23px;">Search results of all documents at Level 1</p>
-<ul>
-<% for(var i = 0; i < docs.length; i++) { %>
+    <p style="font-size: 23px;">Search results of all documents at Level 1</p>
+    <ul>
+        <% for(var i = 0; i < docs.length; i++) { %>
+            <% var link = "https://en.wikipedia.org/wiki/" + docs[i] %>
+            <li><a href="<%= link %>"><%= docs[i] %></a></li>
+        <% } %>
+    </ul>
 
-        <li><%= docs[i] %></li>
-<% } %>
-</ul>
-<% if (hasPrev) { %>
-    <a id="PrevLink">
-        <button name="prev">Previous</button>
-    </a>
-    <script>
-        var PreviousPage = <%= current_page %> -1;
-        PreviousPage.toString();
-        // console.log('The previous page number is', PreviousPage);
-        var href_path = '/results/' + PreviousPage;
-        document.getElementById('PrevLink').setAttribute("href", href_path);
-    </script>
-<% } %>
+    <% if (hasPrev) { %>
+        <div class="button_container1"><br><br>
+            <a id="PrevLink">
+                <button class="btn" name="prev"><span>Previous</span></button>
+            </a>
+        </div>
+        <script>
+            var PreviousPage = <%= current_page %> -1;
+            PreviousPage.toString();
+            var href_path = '/results/' + PreviousPage;
+            document.getElementById('PrevLink').setAttribute("href", href_path);
+        </script>
+    <% } %>
 
-<% if(hasNext) { %>
-    <a id="NextLink">
-        <button name="next">Next</button>
-    </a>
-    <script>
-        <!--console.log('The current page number is', '<%= current_page %>');-->
-        var nextPage = <%= current_page %> +1;
-        nextPage.toString();
-        // console.log('The next page number is', nextPage);
-        var href_path = '/results/' + nextPage;
-        // console.log('The href path is', href_path);
-        document.getElementById('NextLink').setAttribute("href", href_path);
-    </script>
+    <% if(hasNext) { %>
+        <div class="button_container2"><br><br>
+            <a id="NextLink">
+                <button class="btn" name="next"><span>Next</span></button>
+            </a>
+        </div>
+        <script>
+            var nextPage = <%= current_page %> +1;
+            nextPage.toString();
+            var href_path = '/results/' + nextPage;
+            document.getElementById('NextLink').setAttribute("href", href_path);
+        </script>
+    <% } %>
 
-<% } %>
 </div>
+<button onclick="topFunction()" id="myBtn" title="Go to top">
+    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+         width="50" height="50"
+         viewBox="0 0 172 172"
+         style=" fill:#000000;">
+        <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter"
+           stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none"
+           font-size="none" text-anchor="none" style="mix-blend-mode: normal">
+            <path d="M0,172v-172h172v172z" fill="none"></path>
+            <g fill="#000000">
+                <path d="M86,24.8325l-4.8375,4.945l-34.0775,33.97c-2.70094,2.70094 -2.70094,7.08156 0,9.7825c2.70094,2.70094 7.08156,2.70094 9.7825,0l22.2525,-22.36v86.43c-0.04031,2.48594 1.26313,4.78375 3.41313,6.03344c2.13656,1.26313 4.79719,1.26313 6.93375,0c2.15,-1.24969 3.45344,-3.5475 3.41312,-6.03344v-86.43l22.2525,22.36c2.70094,2.70094 7.08156,2.70094 9.7825,0c2.70094,-2.70094 2.70094,-7.08156 0,-9.7825l-34.0775,-33.97z"></path>
+            </g>
+        </g>
+    </svg>
+</button>
+<script>
+    //Get the button
+    var mybutton = document.getElementById("myBtn");
+
+    // When the user scrolls down 20px from the top of the document, show the button
+    window.onscroll = function () {
+        scrollFunction()
+    };
+
+    function scrollFunction() {
+        if (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) {
+            mybutton.style.display = "block";
+        } else {
+            mybutton.style.display = "none";
+        }
+    }
+
+    // When the user clicks on the button, scroll to the top of the document
+    function topFunction() {
+        document.body.scrollTop = 0;
+        document.documentElement.scrollTop = 0;
+    }
+</script>
+
 </body>
 </html>
