@@ -96,6 +96,7 @@ exports.results = async function (req, res) {
     }
     if (parseInt(current_level) === 1) {
         res.render('links/show_words', {
+            root: LocalStorage.getItem('word'),
             docs: docs,
             num_pages: LocalStorage.getItem('num_pages'),
             items_per_page: LocalStorage.getItem('items_per_page'),
