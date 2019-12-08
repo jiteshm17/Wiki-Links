@@ -62,7 +62,7 @@
     <ul>
         <% for(var i = 0; i < documents.length; i++) { %>
             <% var link = "https://en.wikipedia.org/wiki/" + documents[i] %>
-            <li onmouseenter="hover(this, '<%= documents[i] + '<span style="font-style: italic; color:#595959;font-size: 17px;padding-left: 50px"> PATH : ' + root + ' <i class="right"></i> ' + word_map_levelOne[word_map_levelTwo[documents[i]]] + ' <i class="right"></i> ' + word_map_levelTwo[documents[i]] + ' <i class="right"></i> ' + documents[i] + '</span>' %>')"
+            <li onmouseenter="hover(this, '<%= documents[i] + '<span style="font-style: italic; color:#595959;font-size: 17px;padding-left: 50px"> PATH : ' + root + ' <i class="right"></i> ' + word_map_levelOne + ' <i class="right"></i> ' + word_map_levelTwo + ' <i class="right"></i> ' + documents[i] + '</span>' %>')"
                 onmouseleave="hover(this, '<%= documents[i] %>')"><a href="<%= link %>"><%= documents[i] %></a></li>
 
         <% } %>

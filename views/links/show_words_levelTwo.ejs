@@ -43,7 +43,6 @@
                         </label>
                     </div>
                 </div>
-
             </div>
             <div class="input-field second-wrap">
                 <input class="btn-search" type="submit">
@@ -54,8 +53,6 @@
 </div>
 <script src="/javascripts/dropdown.js"></script>
 
-
-
 <div class="results">
     <p style="font-size: 23px">Search results for <%= root %> at Level 2</p>
     <span class="info">"Hover on any result to view the wiki path from query to that result. Click to view its wikipedia page."</span><br><br>
@@ -63,7 +60,7 @@
     <ul>
         <% for(var i = 0; i < documents.length; i++) { %>
             <% var link = "https://en.wikipedia.org/wiki/" + documents[i] %>
-            <li onmouseenter="hover(this, '<%= documents[i] + '<span style="font-style: italic; color:#595959;font-size: 17px;padding-left:50px">  PATH : ' + root + ' <i class="right"></i> ' + word_map[documents[i]] + ' <i class="right"></i> ' + documents[i] %>' + '</span>')"
+            <li onmouseenter="hover(this, '<%= documents[i] + '<span style="font-style: italic; color:#595959;font-size: 17px;padding-left:50px">  PATH : ' + root + ' <i class="right"></i> ' + word_map + ' <i class="right"></i> ' + documents[i] %>' + '</span>')"
                 onmouseleave="hover(this, '<%= documents[i] %>')"><a href="<%=link %>"><%=link %> <%= documents[i] %></a></li>
         <% } %>
     </ul>
