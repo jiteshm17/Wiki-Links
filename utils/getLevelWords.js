@@ -3,9 +3,9 @@ const Link = require('../models/links');
 const LocalStorage = require('localStorage');
 
 function storeTillEnd(links, start, end, phrase) {
-    console.log('in store till end [start,end]', start, ',', end);
+    // console.log('in store till end [start,end]', start, ',', end);
     const limit = parseInt(LocalStorage.getItem('items_per_page'));
-    LocalStorage.removeItem('LevelOneLinks')
+    LocalStorage.removeItem('LevelOneLinks');
     var links_length = links.length;
     var flag = false;
     var hasPrevious = true;
@@ -33,7 +33,7 @@ function storeTillEnd(links, start, end, phrase) {
     if (LocalStorage.getItem(phrase + end.toString()) === undefined) {
         return ['Page doesn\'t exists', false, false];
     }
-    console.log(end, hasPrevious);
+    // console.log(end, hasPrevious);
     return LocalStorage.getItem(phrase + end.toString());
 }
 
@@ -41,11 +41,11 @@ function storeTillEnd(links, start, end, phrase) {
 async function levelTwoUtils(word, start, end) {
     const limit = parseInt(LocalStorage.getItem('items_per_page'));
     var term;
-    console.log('in level two utils[start,end]', start, ',', end);
+    // console.log('in level two utils[start,end]', start, ',', end);
     var links = JSON.parse(LocalStorage.getItem('levelTwolinks'));
-    console.log(links);
+    // console.log(links);
     if (links === null) {
-        console.log('links undefined');
+        // console.log('links undefined');
         var documents = await Link.find({'document': word});
         while (typeof documents[0] !== "undefined" && documents[0].redirect !== undefined) {
             documents = await Link.find({'document': documents[0].redirect});
@@ -55,9 +55,9 @@ async function levelTwoUtils(word, start, end) {
 
     var hasNext = false;
     var hasPrev = true;
-    console.log('got links in utils');
+    // console.log('got links in utils');
     while (start <= end && links.length > 0) {
-        console.log('in while');
+        // console.log('in while');
         hasNext = false;
         hasPrev = true;
         var items = await Link.find({'document': links[links.length - 1]});
@@ -77,7 +77,7 @@ async function levelTwoUtils(word, start, end) {
         if (items[0].links.length > limit) {
             LocalStorage.setItem('levelTwo' + start.toString(), JSON.stringify([items[0].links.slice(0, limit - 1), term, hasPrev, hasNext]));
             if (start == end) {
-                console.log('returning ...');
+                // console.log('returning ...');
                 LocalStorage.setItem('levelTwolinks', JSON.stringify(links));
                 LocalStorage.setItem('levelTwoLastPage', start.toString())
                 return JSON.stringify([items[0].links.slice(0, limit - 1), term, hasPrev, hasNext]);
@@ -85,7 +85,7 @@ async function levelTwoUtils(word, start, end) {
         } else {
             LocalStorage.setItem('levelTwo' + start.toString(), JSON.stringify([items[0].links, term, hasPrev, hasNext]));
             if (start == end) {
-                console.log('returning ...');
+                // console.log('returning ...');
                 LocalStorage.setItem('levelTwolinks', JSON.stringify(links));
                 LocalStorage.setItem('levelTwoLastPage', start.toString())
                 return JSON.stringify([items[0].links, term, hasPrev, hasNext]);
@@ -99,20 +99,20 @@ async function levelTwoUtils(word, start, end) {
 async function levelThreeUtils(word, start, end) {
     const limit = parseInt(LocalStorage.getItem('items_per_page'));
     var term;
-    console.log('in level three utils[start,end]', start, ',', end);
+    // console.log('in level three utils[start,end]', start, ',', end);
     var links_1 = JSON.parse(LocalStorage.getItem('levelThreelinks_1'));
     var links_2;
     var term_1;
     var term_2;
-    console.log(links_1);
+    // console.log(links_1);
     var flag = false;
     if (links_1 === null) {
-        console.log('links are null')
+        // console.log('links are null');
         var documents = await Link.find({'document': word});
         while (typeof documents[0] !== "undefined" && documents[0].redirect !== undefined) {
             documents = await Link.find({'document': documents[0].redirect});
         }
-        links_1 = documents[0].links
+        links_1 = documents[0].links;
         term_1 = links_1[links_1.length - 1];
         links_1.pop();
 
@@ -134,9 +134,9 @@ async function levelThreeUtils(word, start, end) {
 
     var hasPrev = true;
     var hasNext = true;
-    console.log('got links in utils');
+    // console.log('got links in utils');
     while (start <= end) {
-        console.log('in while');
+        // console.log('in while');
         if (links_2.length == 0) {
             term_1 = links_1[links_1.length - 1];
             links_1.pop();
@@ -197,17 +197,17 @@ async function levelThreeUtils(word, start, end) {
 
 
 exports.getLevelOneWords = async function (word, page) {
-    console.log('in getlevelone');
+    // console.log('in getlevelone');
     var levelOneWord = LocalStorage.getItem('levelOneWord');
-    console.log(levelOneWord);
-    console.log('word,page in function:', word, ', ', page);
+    // console.log(levelOneWord);
+    // console.log('word,page in function:', word, ', ', page);
     const limit = parseInt(LocalStorage.getItem('items_per_page'));
     if (levelOneWord !== null && levelOneWord !== word) {
-        console.log('word doesnt match');
-        LocalStorage.removeItem('levelOneWord')
-        var index = 1
+        // console.log('word doesnt match');
+        LocalStorage.removeItem('levelOneWord');
+        var index = 1;
         while (LocalStorage.getItem('levelOne' + index.toString()) !== null) {
-            LocalStorage.removeItem('levelOne' + index.toString())
+            LocalStorage.removeItem('levelOne' + index.toString());
             index = index + 1
         }
         if (LocalStorage.getItem('levelOneLastPage') !== null) {
@@ -219,27 +219,27 @@ exports.getLevelOneWords = async function (word, page) {
         levelOneWord = null;
     }
     if (levelOneWord === null) {
-        console.log('word is null');
+        // console.log('word is null');
         LocalStorage.setItem('levelOneWord', word);
         var documents = await Link.find({'document': word});
         while (typeof documents[0] !== "undefined" && documents[0].redirect !== undefined) {
             documents = await Link.find({'document': documents[0].redirect});
         }
-        console.log('got all links');
+        // console.log('got all links');
         var links = documents[0].links;
         return storeTillEnd(links, 1, page, 'LevelOne')
 
     } else if (levelOneWord === word) {
-        console.log('word matches');
-        console.log(LocalStorage.getItem('LevelOneLinks'));
+        // console.log('word matches');
+        // console.log(LocalStorage.getItem('LevelOneLinks'));
         var links = JSON.parse(LocalStorage.getItem('LevelOneLinks'));
         var links_length = links.length;
         var hasNext = true;
         var hasPrevious = true;
-        console.log(limit);
+        // console.log(limit);
 
         var lastpage = JSON.parse(LocalStorage.getItem('LevelOneLastPage'));
-        console.log('lastpage:', lastpage);
+        // console.log('lastpage:', lastpage);
         if (lastpage >= page) {
             return LocalStorage.getItem('LevelOne' + page.toString());
         }
@@ -250,15 +250,15 @@ exports.getLevelOneWords = async function (word, page) {
 
 
 exports.getLevelTwoWords = async function (word, page) {
-    console.log('in getleveltwo');
+    // console.log('in getleveltwo');
     var levelTwoWord = LocalStorage.getItem('levelTwoWord');
-    console.log(levelTwoWord);
-    console.log('word,page in function:', word, ', ', page);
+    // console.log(levelTwoWord);
+    // console.log('word,page in function:', word, ', ', page);
     const limit = parseInt(LocalStorage.getItem('items_per_page'));
     if (levelTwoWord !== null && levelTwoWord !== word) {
-        console.log('word doesnt match');
-        LocalStorage.removeItem('levelTwoWord')
-        var index = 1
+        // console.log('word doesnt match');
+        LocalStorage.removeItem('levelTwoWord');
+        var index = 1;
         while (LocalStorage.getItem('levelTwo' + index.toString()) !== null) {
             LocalStorage.removeItem('levelTwo' + index.toString())
             index = index + 1
@@ -272,31 +272,31 @@ exports.getLevelTwoWords = async function (word, page) {
         levelTwoWord = null;
     }
     if (levelTwoWord === null) {
-        console.log('word is null');
+        // console.log('word is null');
         LocalStorage.setItem('levelTwoWord', word);
         return levelTwoUtils(word, 1, page)
     } else if (levelTwoWord === word) {
-        console.log('word equal');
+        // console.log('word equal');
         if (LocalStorage.getItem('levelTwo' + page.toString()) !== null) {
             return LocalStorage.getItem('levelTwo' + page.toString());
         }
-        console.log('GOING to utils');
+        // console.log('GOING to utils');
         var lastpage = parseInt(LocalStorage.getItem('levelTwoLastPage'));
-        console.log('lastpage:', lastpage);
+        // console.log('lastpage:', lastpage);
         return levelTwoUtils(word, lastpage + 1, page);
     }
 
 };
 
 exports.getLevelThreeWords = async function (word, page) {
-    console.log('in getlevelthree');
+    // console.log('in getlevelthree');
     var levelThreeWord = LocalStorage.getItem('levelThreeWord');
-    console.log(levelThreeWord);
-    console.log('word,page in function:', word, ', ', page);
+    // console.log(levelThreeWord);
+    // console.log('word,page in function:', word, ', ', page);
     const limit = parseInt(LocalStorage.getItem('items_per_page'));
     if (levelThreeWord !== null && levelThreeWord !== word) {
-        console.log('word doesnt match');
-        LocalStorage.removeItem('levelThreeWord')
+        // console.log('word doesnt match');
+        LocalStorage.removeItem('levelThreeWord');
         var index = 1;
         while (LocalStorage.getItem('levelThree' + index.toString()) !== null) {
             LocalStorage.removeItem('levelThree' + index.toString())
@@ -317,19 +317,19 @@ exports.getLevelThreeWords = async function (word, page) {
         levelThreeWord = null;
     }
     if (levelThreeWord === null) {
-        console.log('word is null');
+        // console.log('word is null');
         LocalStorage.setItem('levelThreeWord', word);
 
         return levelThreeUtils(word, 1, page)
 
     } else if (levelThreeWord === word) {
-        console.log('word equal');
+        // console.log('word equal');
         if (LocalStorage.getItem('levelThree' + page.toString()) !== null) {
             return LocalStorage.getItem('levelThree' + page.toString());
         }
-        console.log('GOING to utils');
+        // console.log('GOING to utils');
         var lastpage = parseInt(LocalStorage.getItem('levelThreeLastPage'));
-        console.log('lastpage:', lastpage);
+        // console.log('lastpage:', lastpage);
         return levelThreeUtils(word, lastpage + 1, page);
     }
 
