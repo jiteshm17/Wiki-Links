@@ -6,6 +6,7 @@ var LinksSchema = new Schema(
     {
         document: {type: String},
         links: [{type: String}],
+        redirect: {type: String},
 
     }
 );
