@@ -27,13 +27,13 @@ exports.results = async function (req, res) {
 
     var current_level = LocalStorage.getItem('search_level')
     if (parseInt(current_level) === 1) {
-        console.log('Getting docs');
-        console.log('Word:',LocalStorage.getItem('word'));
+        // console.log('Getting docs');
+        // console.log('Word:',LocalStorage.getItem('word'));
         docs = await getLevels.getLevelOneWords(LocalStorage.getItem('word'),req.params.page);
-        docs = JSON.parse(docs)
-        console.log('Got docs');
-        console.log('docs:',docs);
-        console.log('current_page:',req.params.page);
+        docs = JSON.parse(docs);
+        // console.log('Got docs');
+        // console.log('docs:',docs);
+        // console.log('current_page:',req.params.page);
         res.render('links/show_words', {
             root: LocalStorage.getItem('word'),
             docs: docs[0],
@@ -46,13 +46,13 @@ exports.results = async function (req, res) {
 
 
     } else if (parseInt(current_level) === 2) {
-        console.log('Getting docs');
-        console.log('Word:',LocalStorage.getItem('word'));
+        // console.log('Getting docs');
+        // console.log('Word:',LocalStorage.getItem('word'));
         docs = await getLevels.getLevelTwoWords(LocalStorage.getItem('word'),req.params.page);
-        console.log('Got docs');
+        // console.log('Got docs');
         docs = JSON.parse(docs);
-        console.log('docs:',docs);
-        console.log('current_page:',req.params.page);
+        // console.log('docs:',docs);
+        // console.log('current_page:',req.params.page);
         res.render('links/show_words_levelTwo', {
             root: LocalStorage.getItem('word'),
             word_map: docs[1],
@@ -63,13 +63,13 @@ exports.results = async function (req, res) {
         })
 
     } else if (parseInt(current_level) === 3) {
-        console.log('Getting docs');
-        console.log('Word:',LocalStorage.getItem('word'));
+        // console.log('Getting docs');
+        // console.log('Word:',LocalStorage.getItem('word'));
         docs = await getLevels.getLevelThreeWords(LocalStorage.getItem('word'),req.params.page);
-        console.log('Got docs');
+        // console.log('Got docs');
         docs = JSON.parse(docs);
-        console.log('docs:',docs);
-        console.log('current_page:',req.params.page);
+        // console.log('docs:',docs);
+        // console.log('current_page:',req.params.page);
         res.render('links/show_words_levelThree', {
             root: LocalStorage.getItem('word'),
             word_map_levelOne: docs[1],

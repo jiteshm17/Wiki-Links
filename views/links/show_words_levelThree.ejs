@@ -82,7 +82,6 @@
         <script>
             var PreviousPage = <%= current_page %> -1;
             PreviousPage.toString();
-            console.log('The previous page number is', PreviousPage);
             var href_path = '/results/' + PreviousPage;
             document.getElementById('PrevLink').setAttribute("href", href_path);
         </script>
@@ -95,12 +94,9 @@
             </a>
         </div>
         <script>
-            console.log('The current page number is', '<%= current_page %>');
             var nextPage = <%= current_page %> +1;
             nextPage.toString();
-            console.log('The next page number is', nextPage);
             var href_path = '/results/' + nextPage;
-            console.log('The href path is', href_path);
             document.getElementById('NextLink').setAttribute("href", href_path);
         </script>
 
