@@ -35,6 +35,7 @@ exports.results = async function (req, res) {
         console.log('docs:',docs);
         console.log('current_page:',req.params.page);
         res.render('links/show_words', {
+            root: LocalStorage.getItem('word'),
             docs: docs[0],
             num_pages: LocalStorage.getItem('num_pages'),
             items_per_page: LocalStorage.getItem('items_per_page'),
