@@ -11,6 +11,23 @@ exports.searchWord = function (req, res) {
 exports.results = async function (req, res) {
 
     const word = req.body.word;
+
+    if (typeof req.body.word === "undefined") {
+
+        const err = await Link.find({'document': LocalStorage.getItem('word')});
+        if (err.length === 0) {
+            res.send('Word does not exist');
+        }
+
+
+    } else {
+        const err = await Link.find({document: word});
+        if (err.length === 0) {
+            res.send('Word does not exist');
+        }
+    }
+
+
     if (typeof req.body.search_level !== "undefined") {
         LocalStorage.setItem('search_level', req.body.search_level);
         if (LocalStorage.getItem('search_level') !== undefined) {
@@ -25,11 +42,11 @@ exports.results = async function (req, res) {
         }
     }
 
-    var current_level = LocalStorage.getItem('search_level')
+    var current_level = LocalStorage.getItem('search_level');
     if (parseInt(current_level) === 1) {
         // console.log('Getting docs');
         // console.log('Word:',LocalStorage.getItem('word'));
-        docs = await getLevels.getLevelOneWords(LocalStorage.getItem('word'),req.params.page);
+        docs = await getLevels.getLevelOneWords(LocalStorage.getItem('word'), req.params.page);
         docs = JSON.parse(docs);
         // console.log('Got docs');
         // console.log('docs:',docs);
@@ -48,7 +65,7 @@ exports.results = async function (req, res) {
     } else if (parseInt(current_level) === 2) {
         // console.log('Getting docs');
         // console.log('Word:',LocalStorage.getItem('word'));
-        docs = await getLevels.getLevelTwoWords(LocalStorage.getItem('word'),req.params.page);
+        docs = await getLevels.getLevelTwoWords(LocalStorage.getItem('word'), req.params.page);
         // console.log('Got docs');
         docs = JSON.parse(docs);
         // console.log('docs:',docs);
@@ -65,7 +82,7 @@ exports.results = async function (req, res) {
     } else if (parseInt(current_level) === 3) {
         // console.log('Getting docs');
         // console.log('Word:',LocalStorage.getItem('word'));
-        docs = await getLevels.getLevelThreeWords(LocalStorage.getItem('word'),req.params.page);
+        docs = await getLevels.getLevelThreeWords(LocalStorage.getItem('word'), req.params.page);
         // console.log('Got docs');
         docs = JSON.parse(docs);
         // console.log('docs:',docs);
@@ -81,7 +98,8 @@ exports.results = async function (req, res) {
         })
 
     }
-};
+}
+;
 
 
 exports.getWords = async function (req, res) {
