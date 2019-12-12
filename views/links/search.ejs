@@ -58,36 +58,36 @@
         </div>
     </form>
 
-    <script>
-        $(function () {
-            $('#search').autocomplete({
-                source: function (req, res) {
-                    $.ajax({
-                        url: "autocomplete/",
-                        dataType: "jsonp",
-                        type: "GET",
-                        data: req,
-                        success: function (data) {
-                            res(data)
-                        },
+    <!--    <script>-->
+    <!--        $(function () {-->
+    <!--            $('#search').autocomplete({-->
+    <!--                source: function (req, res) {-->
+    <!--                    $.ajax({-->
+    <!--                        url: "autocomplete/",-->
+    <!--                        dataType: "jsonp",-->
+    <!--                        type: "GET",-->
+    <!--                        data: req,-->
+    <!--                        success: function (data) {-->
+    <!--                            res(data)-->
+    <!--                        },-->
 
-                        error: function (err) {
-                            console.log(err.status);
-                        }
+    <!--                        error: function (err) {-->
+    <!--                            console.log(err.status);-->
+    <!--                        }-->
 
-                    });
-                },
+    <!--                    });-->
+    <!--                },-->
 
-                minLength: 1,
-                select: function (event, ui) {
-                    if (ui.item) {
-                        $('#search').val(ui.item.label);
-                    }
-                }
-            });
+    <!--                minLength: 1,-->
+    <!--                select: function (event, ui) {-->
+    <!--                    if (ui.item) {-->
+    <!--                        $('#search').val(ui.item.label);-->
+    <!--                    }-->
+    <!--                }-->
+    <!--            });-->
 
-        });
-    </script>
+    <!--        });-->
+    <!--    </script>-->
 
 </div>
 <script src="/javascripts/dropdown.js"></script>
